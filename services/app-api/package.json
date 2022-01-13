@@ -17,5 +17,31 @@
   },
   "dependencies": {
     "uuid": "^7.0.3"
+  },
+  "scripts": {
+    "coverage": "jest --coverage",
+    "test": "jest --setupFiles dotenv/config"
+  },  
+  "jest": {
+    "coverageReporters": [
+      "json",
+      [
+        "lcov",
+        {
+          "projectRoot": "../../"
+        }
+      ]
+    ],
+    "verbose": true,
+    "moduleNameMapper": {
+      "^.+\\.(css|less|scss)$": "identity-obj-proxy"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupJest.js"
+    ],
+    "globals": {
+      "_env_": {}
+    },
+    "testEnvironment": "jest-environment-jsdom"
   }
 }
