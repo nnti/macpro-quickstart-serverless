@@ -1,6 +1,6 @@
 
 describe("Test prince PDF convertor", () => {
   test("Validate PDF", () => {
-    return true;
+    expect(true).toEqual(true);
   });
 });
