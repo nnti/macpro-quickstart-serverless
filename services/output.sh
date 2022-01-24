@@ -15,4 +15,4 @@ service=${1}
 output=${2}
 stage=${3:-dev}
 
-cd $service && serverless info --stage $stage --verbose | egrep -A 1 "$output:" && cd ..
+cd $service && serverless info --stage $stage --verbose | egrep -A 1 "$output" | egrep -v "$output" && cd ..
