@@ -5,16 +5,12 @@ set -e
 stage=${1:-dev}
 
 services=(
-  'database'
-  'uploads'
   'app-api'
-  'stream-functions'
-  'ui'
-  'ui-auth'
-  'ui-src'
 )
 
+
 install_deps() {
+  echo "install_deps"
   if [ "$CI" == "true" ]; then # If we're in a CI system
     if [ ! -d "node_modules" ]; then # If we don't have any node_modules (CircleCI cache miss scenario), run yarn install --frozen-lockfile.  Otherwise, we're all set, do nothing.
       yarn install --frozen-lockfile
@@ -44,7 +40,7 @@ pushd services
 echo """
 ------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------
-Application endpoint:  `./output.sh ui CloudFrontEndpointUrl $stage`
+Application endpoint:  `./output.sh app-api endpoints $stage`
 ------------------------------------------------------------------------------------------------
 """
 popd
