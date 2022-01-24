@@ -15,9 +15,9 @@ plugins:
   - serverless-stack-termination-protection
   - serverless-idempotency-helper
   - serverless-iam-helper
-  - serverless-s3-bucket-helper
   - serverless-online
   - serverless-plugin-scripts
+  - serverless-s3-bucket-helper
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -27,10 +27,6 @@ custom:
       - master
       - val
       - production
-  tableName: ${env:AMENDMENTS_TABLE_NAME, cf:database-${self:custom.stage}.AmendmentsTableName}
-  tableArn: ${env:AMENDMENTS_TABLE_ARN, cf:database-${self:custom.stage}.AmendmentsTableArn}
-  atomicCounterTableName: ${env:AMENDMENTS_COUNTER_TABLE_NAME, cf:database-${self:custom.stage}.AmendmentsAtomicCounterTableName}
-  atomicCounterTableArn: ${env:AMENDMENTS_COUNTER_TABLE_ARN, cf:database-${self:custom.stage}.AmendmentsAtomicCounterTableArn}
   webAclName: ${self:service}-${self:custom.stage}-webacl
   associateWaf:
     name: ${self:custom.webAclName}
@@ -57,22 +53,6 @@ provider:
     role:
       path: ${ssm:/configuration/${self:custom.stage}/iam/path~true, ssm:/configuration/default/iam/path~true, "/"}
       permissionsBoundary: ${ssm:/configuration/${self:custom.stage}/iam/permissionsBoundaryPolicy~true, ssm:/configuration/default/iam/permissionsBoundaryPolicy~true, ""}
-      statements:
-        - Effect: "Allow"
-          Action:
-            - dynamodb:DescribeTable
-            - dynamodb:Query
-            - dynamodb:Scan
-            - dynamodb:GetItem
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:DeleteItem
-          Resource:
-            - ${self:custom.tableArn}
-            - ${self:custom.atomicCounterTableArn}
-  environment:
-    tableName: ${self:custom.tableName}
-    atomicCounterTableName: ${self:custom.atomicCounterTableName}
 
 layers:
   prince:
@@ -81,46 +61,6 @@ layers:
       artifact: lambda_layer.zip
 
 functions:
-  create:
-    handler: handlers/create.main
-    events:
-      - http:
-          path: amendments
-          method: post
-          cors: true
-          authorizer: aws_iam
-  get:
-    handler: handlers/get.main
-    events:
-      - http:
-          path: amendments/{id}
-          method: get
-          cors: true
-          authorizer: aws_iam
-  list:
-    handler: handlers/list.main
-    events:
-      - http:
-          path: amendments
-          method: get
-          cors: true
-          authorizer: aws_iam
-  update:
-    handler: handlers/update.main
-    events:
-      - http:
-          path: amendments/{id}
-          method: put
-          cors: true
-          authorizer: aws_iam
-  delete:
-    handler: handlers/delete.main
-    events:
-      - http:
-          path: amendments/{id}
-          method: delete
-          cors: true
-          authorizer: aws_iam
   prince:
     handler: handlers/prince.main
     timeout: 30
