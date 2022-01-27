@@ -1,6 +1,9 @@
-# macpro-quickstart-serverless ![Build](https://github.com/CMSgov/macpro-quickstart-serverless/workflows/Deploy/badge.svg?branch=master) [![latest release](https://img.shields.io/github/release/cmsgov/macpro-quickstart-serverless.svg)](https://github.com/cmsgov/macpro-quickstart-serverless/releases/latest) [![Maintainability](https://api.codeclimate.com/v1/badges/1449ad929006f559756b/maintainability)](https://codeclimate.com/github/CMSgov/macpro-quickstart-serverless/maintainability) [![CodeQL](https://github.com/CMSgov/macpro-quickstart-serverless/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/CMSgov/macpro-quickstart-serverless/actions/workflows/codeql-analysis.yml) [![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) [![Test Coverage](https://api.codeclimate.com/v1/badges/1449ad929006f559756b/test_coverage)](https://codeclimate.com/github/CMSgov/macpro-quickstart-serverless/test_coverage)
+# macpro-platform-doc-conversion ![Build](https://github.com/CMSgov/macpro-quickstart-serverless/workflows/Deploy/badge.svg?branch=master) [![latest release](https://img.shields.io/github/release/cmsgov/macpro-quickstart-serverless.svg)](https://github.com/cmsgov/macpro-quickstart-serverless/releases/latest) [![Maintainability](https://api.codeclimate.com/v1/badges/1449ad929006f559756b/maintainability)](https://codeclimate.com/github/CMSgov/macpro-quickstart-serverless/maintainability) [![CodeQL](https://github.com/CMSgov/macpro-quickstart-serverless/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/CMSgov/macpro-quickstart-serverless/actions/workflows/codeql-analysis.yml) [![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) [![Test Coverage](https://api.codeclimate.com/v1/badges/1449ad929006f559756b/test_coverage)](https://codeclimate.com/github/CMSgov/macpro-quickstart-serverless/test_coverage)
 
-A serverless form submission application built and deployed to AWS with the Serverless Application Framework.
+MACPRO Platform document conversion APIs.
+
+Initial API:
+* 508 compliant HTML -> 508 compliant PDF (via Prince XML)
 
 ## Release
 
@@ -16,18 +19,6 @@ Our product is promoted through branches. Master is merged to val to affect a ma
 
 ![Architecture Diagram](./.images/architecture.svg?raw=true)
 
-## Local Dev
-
-Run all the services locally with the command `./dev local`
-
-See the Requirements section if the command asks for any prerequisites you don't have installed.
-
-Local dev is configured in typescript project in `./src`. The entrypoint is `./src/dev.ts`, it manages running the moving pieces locally: the API, the database, the filestore, and the frontend.
-
-Local dev is built around the Serverless plugin [`serverless-offline`](https://github.com/dherault/serverless-offline). `serverless-offline` runs an API gateway locally configured by `./services/app-api/serverless.yml` and hot reloads your lambdas on every save. The plugins [`serverless-dynamodb-local`](https://github.com/99x/serverless-dynamodb-local) and [`serverless-s3-local`](https://github.com/ar90n/serverless-s3-local) stand up the local db and local s3 in a similar fashion.
-
-When run locally, auth bypasses Cognito. The frontend mimics login in local storage with a mock user and sends an id in the `cognito-identity-id` header on every request. `serverless-offline` expects that and sets it as the cognitoId in the requestContext for your lambdas, just like Cognito would in AWS.
-
 ## Usage
 
 See master build [here](https://github.com/CMSgov/macpro-quickstart-serverless/actions?query=branch%3Amaster)
@@ -42,13 +33,7 @@ Want to deploy from your Mac?
 - brew install yarn
 - sh deploy.sh
 
-Building the app locally
 
-- todo
-
-Running tests locally
-
-- todo
 
 ## Requirements
 
@@ -72,18 +57,23 @@ nvm use
 
 # install yarn
 brew install yarn
-
-# run dev
-./dev local
 ```
 
-## Dependencies
+If you'd like to test deploying prior to committing, you can deploy to AWS as follows:
+```
+./deploy.sh <branch name>
 
-None.
+# quick and dirty test where test is a valid html file that is already 508 compliant
+# base64 -i ~/Desktop/test.html -o test_b64.html
+# Note output will be a little garbled since we're filtering out special chars
+# To properly validate the output perform these steps in JS or Python and re-encode the output from the API call in base64
+curl -F "data=~@~/Desktop/<some base 64 test_b64.html" --tlsv1.2 https://<output from deploy>.execute-api.us-east-1.amazonaws.com/<branch name>/prince | sed 's/^"//; s/"$//' | base64 -d > ~/Desktop/test.pdf
 
-## Examples
+# to clean up
+./destroy.sh <branch name>
+```
 
-None.
+
 
 ## Contributing / To-Do
 
@@ -126,15 +116,3 @@ To set the SLACK_WEBHOOK_URL:
 
 Please join the macpro-quickstart-serverless slack channel to get all build status and also contribute to any ongoing discussions.
 Join here: https://join.slack.com/t/macproquickst-ugp3045/shared_invite/zt-mdxpbtkk-SrLRi_yzJrXX3uYgvrbjlg
-
-### Contributors
-
-This project made possible by the [Serverless Stack](https://serverless-stack.com/) and its authors/contributors. The extremely detailed tutorial, code examples, and serverless pattern is where this project started. I can't recommend this resource enough.
-
-| [![Mike Dial][dial_avatar]][dial_homepage]<br/>[Mike Dial][dial_homepage] | [![Seth Sacher][sacher_avatar]][sacher_homepage]<br/>[Seth Sacher][sacher_homepage] |
-| ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-
-[dial_homepage]: https://github.com/mdial89f
-[dial_avatar]: https://avatars.githubusercontent.com/mdial89f?size=150
-[sacher_homepage]: https://github.com/sethsacher
-[sacher_avatar]: https://avatars.githubusercontent.com/sethsacher?size=150
