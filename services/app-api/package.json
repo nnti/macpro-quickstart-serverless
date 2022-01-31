@@ -27,26 +27,5 @@
     "jest-transform-stub": "^2.0.0",
     "ts-jest": "^27.1.3",
     "uuid": "^7.0.3"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "setupTests.js"
-    ],
-    "transform": {
-      "util": "jest-transform-stub"
-    },
-    "coverageReporters": [
-      "json",
-      [
-        "lcov",
-        {
-          "projectRoot": "../../"
-        }
-      ]
-    ],
-    "verbose": true,
-    "globals": {
-      "_env_": {}
-    }
   }
 }
