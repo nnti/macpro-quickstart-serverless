@@ -20,9 +20,12 @@ describe("Test prince PDF convertor", () => {
     .mockImplementation(() => {});
 
   test("Verify empty event returns error", async () => {
-    const response = await prince({ source: null });
-    expect(response instanceof Error).toBe(true);
-    expect(response.message).toEqual("No data.");
+    try {
+      const response = await prince({ source: null });
+    } catch(e) {
+      expect(e instanceof Error).toBe(true);
+      expect(e.message).toEqual("No data.");
+    }
   });
 
   test("Verify serverless warmup ejection", async () => {
@@ -59,10 +62,13 @@ describe("Test prince PDF convertor", () => {
   test("Verify error is returned if execSync returns something other than a string", async () => {
     execSyncMock.mockImplementation(() => null);
     const consoleMock = jest.spyOn(console, "log").mockImplementation(() => {});
-    const response = await prince({ body: encodedInput });
-    expect(response instanceof Error).toBe(true);
-    expect(response.message).toEqual(
-      "TypeError: Cannot read property 'toString' of null"
-    );
+    try {
+      const response = await prince({ body: encodedInput });
+    } catch(e) {
+      expect(e instanceof Error).toBe(true);
+      expect(e.message).toEqual(
+        "TypeError: Cannot read property 'toString' of null"
+      );
+    }
   });
 });

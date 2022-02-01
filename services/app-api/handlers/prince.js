@@ -4,7 +4,7 @@ import * as fs from "fs";
 
 export const prince = async (event, context) => {
   if (!event || !event.body) {
-    return new Error("No data.");
+    throw new Error("No data.");
   }
 
   // If this invocation is a prewarm, do nothing and return.
@@ -28,7 +28,7 @@ export const prince = async (event, context) => {
     return result.toString("base64");
   } catch (err) {
     console.log(err);
-    return new Error(err);
+    throw new Error(err);
   }
 };
 
