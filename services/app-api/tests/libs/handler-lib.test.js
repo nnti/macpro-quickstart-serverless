@@ -22,7 +22,7 @@ describe("Test handler-lib", () => {
   const badResponse = {
     ...goodResponse,
     statusCode: 500,
-    body: "{\"error\":\"bad response\"}",
+    body: '{"error":"bad response"}',
   };
 
   const testEvent = {
@@ -44,8 +44,10 @@ describe("Test handler-lib", () => {
   });
 
   test("Verify configutation with bad response", async () => {
-    const e = {message: 'bad response'};
-    const lambda = async () => {throw e};
+    const e = { message: "bad response" };
+    const lambda = async () => {
+      throw e;
+    };
 
     const handlerWrapper = await handler(lambda);
     const result = await handlerWrapper(testEvent, context);

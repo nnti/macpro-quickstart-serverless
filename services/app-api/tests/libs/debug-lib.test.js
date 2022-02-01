@@ -19,10 +19,15 @@ describe("Test debug-lib", () => {
 
   test("Verify flush can be called", async () => {
     const flushSpy = jest.spyOn(debugLib, "flush");
-    const consoleMock = jest.spyOn(console, 'error').mockImplementation(() => {});;
-    debugLib.flush('test');
+    const consoleErrorMock = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const consoleDebugMock = jest
+      .spyOn(console, "debug")
+      .mockImplementation(() => {});
+    debugLib.flush("test");
 
-    expect(flushSpy).toHaveBeenCalledWith('test');
-    expect(consoleMock).toHaveBeenCalledWith('test');
+    expect(flushSpy).toHaveBeenCalledWith("test");
+    expect(consoleErrorMock).toHaveBeenCalledWith("test");
   });
 });

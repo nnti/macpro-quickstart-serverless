@@ -1,5 +1,5 @@
 import handler from "./../libs/handler-lib";
-import {execSync} from "child_process";
+import { execSync } from "child_process";
 import * as fs from "fs";
 
 export const prince = async (event, context) => {
@@ -17,7 +17,7 @@ export const prince = async (event, context) => {
   const b64EncodedString = Buffer.from(body, "base64");
 
   //verify input is base64 encoded
-  if(b64EncodedString.toString('base64') !== body) {
+  if (b64EncodedString.toString("base64") !== body) {
     return new Error("Content is not base64 encoded.");
   }
 
