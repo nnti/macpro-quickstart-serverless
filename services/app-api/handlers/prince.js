@@ -3,14 +3,14 @@ import { execSync } from "child_process";
 import * as fs from "fs";
 
 export const prince = async (event, context) => {
-  if (!event || !event.body) {
-    throw new Error("No data.");
-  }
-
   // If this invocation is a prewarm, do nothing and return.
-  if (event.source == "serverless-plugin-warmup") {
+  if (event && event.source == "serverless-plugin-warmup") {
     console.log("Warmed up!");
     return null;
+  }
+
+  if (!event || !event.body) {
+    throw new Error("No data.");
   }
 
   const body = event.body;
