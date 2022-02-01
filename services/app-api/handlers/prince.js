@@ -1,6 +1,8 @@
 import handler from "./../libs/handler-lib";
-var execSync = require("child_process").execSync;
-const fs = require("fs");
+//var execSync = require("child_process").execSync;
+//const fs = require("fs");
+import execSync from "child_process";
+import * as fs from "fs";
 
 export const main = handler(async (event, context) => {
   // If this invocation is a prewarm, do nothing and return.
