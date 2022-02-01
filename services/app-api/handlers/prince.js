@@ -18,7 +18,7 @@ export const prince = async (event, context) => {
 
   //verify input is base64 encoded
   if (b64EncodedString.toString("base64") !== body) {
-    return new Error("Content is not base64 encoded.");
+    throw new Error("Content is not base64 encoded.", b64EncodedString.toString("base64"), body);
   }
 
   let html = b64EncodedString.toString("ascii");
