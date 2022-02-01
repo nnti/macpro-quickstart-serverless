@@ -39,7 +39,7 @@ describe("Test prince PDF convertor", () => {
     expect(response).toBeNull();
     expect(consoleLogMock).toHaveBeenCalledWith("Warmed up!");
   });
-
+/*
   test("Verify error if text is not encoded correctly", async () => {
     try {
       const response = await prince({ body: output });
@@ -48,7 +48,7 @@ describe("Test prince PDF convertor", () => {
       expect(e.message).toEqual("Content is not base64 encoded.");
     }
   });
-
+*/
   test("Verify text is encoded correctly", async () => {
     const response = await prince({ body: encodedInput });
     expect(writeFileSyncMock).toHaveBeenCalledWith("/tmp/input", output);
