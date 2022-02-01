@@ -1,10 +1,10 @@
 import handler from "./../libs/handler-lib";
 //var execSync = require("child_process").execSync;
 //const fs = require("fs");
-import execSync from "child_process";
+import {execSync} from "child_process";
 import * as fs from "fs";
 
-export const main = handler(async (event, context) => {
+export const prince = async (event, context) => {
   // If this invocation is a prewarm, do nothing and return.
   if (event.source == "serverless-plugin-warmup") {
     console.log("Warmed up!");
@@ -23,4 +23,6 @@ export const main = handler(async (event, context) => {
   } catch (err) {
     console.log(err);
   }
-});
+};
+
+export const main = handler(prince);
